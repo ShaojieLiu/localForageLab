@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+  <script>
+    const newCanvas = (id) => {
+      const canvas1 = document.createElement('canvas');
+      let ctx = canvas1.getContext('2d')
+      canvas1.id = id;
+      document.body.appendChild(canvas1)
+      ctx.fillRect(0, 0, 10, 10)
+      setTimeout(() => {
+        ctx.fillRect(10, 10, 20, 20)
+        ctx = null;
+      }, 500)
+      return canvas1;
+    }
+    Array.from({
+      length: 7
+    }).forEach((v, i) => {
+      let c1 = newCanvas(i);
+      setTimeout(() => {
+        document.body.removeChild(c1)
+        c1 = null;
+      }, 1500)
+    })
+    setTimeout(() => {
+      console.log(document.getElementById('2'))
+    }, 2000)
+  </script>
+
+</body>
+
+</html>

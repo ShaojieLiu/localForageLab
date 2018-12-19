@@ -1,12 +1,17 @@
 let store1, store2;
 
-const init = () => {
+const init = cb => {
   const name = "store1";
   localforage.config();
   store1 = localforage.createInstance({
     name
   });
-  console.log(name, store1, window.data);
+  console.log(name, store1);
+  axios.get("./data/data1.json").then(v => {
+    window.data = v.data;
+    console.log("window.data", window.data);
+    cb();
+  });
 };
 
 // const jsTest = () => {
@@ -30,17 +35,32 @@ const init = () => {
 // };
 
 const main = () => {
-  init();
-  // jsTest();
+  // jsTest();s
 
-  const setData = key => {
+  const initCB = () => {
+    const setData = key => {
+      store1
+        .setItem(key.toString(), window.data)
+        .then(v => console.log("success"))
+        .catch(e => console.error(e));
+    };
+
+    Array.from({ length: 50 }).map((v, i) => setData(i));
+
     store1
-      .setItem(key.toString(), window.data)
-      .then(v => console.log("success"))
+      .getItem("49")
+      .then(v => {
+        console.log("success", v);
+        const p = document.createElement("p");
+        const d = v.data.slice(0, 10);
+        p.innerHTML = d;
+        document.body.appendChild(p);
+        // alert(d);
+      })
       .catch(e => console.error(e));
   };
 
-  // Array.from({ length: 1024 }).map((v, i) => setData(i));
+  init(initCB);
 
   // store1
   //   .getItem("key")
